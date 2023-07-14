@@ -5,4 +5,6 @@ module com.example.diskanalyser {
 
     opens com.example.diskanalyser to javafx.fxml;
     exports com.example.diskanalyser;
+    exports com.example.diskanalyser.controller;
+    opens com.example.diskanalyser.controller to javafx.fxml;
 }
