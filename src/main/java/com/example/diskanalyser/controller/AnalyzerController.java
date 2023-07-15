@@ -70,12 +70,12 @@ public class AnalyzerController {
                             return parent != null && parent.toString().equals(path);
                         })
                         .filter(entry -> entry.getValue() >= gb)
+                        .limit(50)
                         .map(entry ->
                                 new PieChart.Data(sFullPath.isSelected() ?
                                         entry.getKey() :
                                         Path.of(entry.getKey()).getFileName().toString(), entry.getValue()))
                         .sorted(Comparator.comparing(PieChart.Data::getPieValue).reversed())
-                        .limit(100)
                         .collect(Collectors.toList())
         );
 
