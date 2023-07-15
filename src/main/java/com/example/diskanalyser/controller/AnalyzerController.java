@@ -7,24 +7,26 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class AnalyzerController {
     private Stage stage;
-    private Map<String, Long> sizes;
-    private final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+    protected Map<String, Long> sizes;
+    protected final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
     @FXML
     private Button directoryButton;
 
     @FXML
-    private PieChart pieChart;
+    protected PieChart pieChart;
 
     @FXML
     private void handleDirectoryButtonAction(ActionEvent event) {
@@ -43,7 +45,8 @@ public class AnalyzerController {
         stage.setTitle("disk-analyzer");
     }
 
-    private void createChart(String path) {
+    public void createChart(String path) {
+        AtomicLong maxSize = new AtomicLong();
         pieChartData.clear();
         // Create data for the pie chart
         pieChartData.addAll(
@@ -63,10 +66,13 @@ public class AnalyzerController {
         // Assigning event handlers for pie chart segments
         pieChart.getData().forEach(data -> {
             data.getNode().addEventHandler(ActionEvent.ACTION, event -> {
+                // Folder size
+                Tooltip tooltip = new Tooltip(String.format("%.2f GB", data.getPieValue() / 1e9));
+                Tooltip.install(data.getNode(), tooltip);
                 // Rebuild the pie chart with a new path
                 createChart(data.getName());
             });
+            data.setName(data.getName() + " " + String.format("%.2f GB", data.getPieValue() / 1e9));
         });
     }
-
 }
