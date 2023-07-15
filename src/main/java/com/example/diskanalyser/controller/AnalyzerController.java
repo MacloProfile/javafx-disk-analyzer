@@ -8,17 +8,19 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class AnalyzerController {
+    private Long gb;
     private Stage stage;
     protected Map<String, Long> sizes;
     protected final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
@@ -31,6 +33,9 @@ public class AnalyzerController {
 
     @FXML
     private CheckBox sFullPath;
+
+    @FXML
+    private TextField limit;
 
     @FXML
     private void handleDirectoryButtonAction(ActionEvent event) {
@@ -47,6 +52,11 @@ public class AnalyzerController {
     public void initialize(Stage stage) {
         this.stage = stage;
         stage.setTitle("disk-analyzer");
+        if (!limit.getText().isEmpty()) {
+            gb = Long.parseLong(limit.getText()) * 1024 * 1024 * 8;
+        } else {
+            gb = 0L;
+        }
     }
 
     public void createChart(String path) {
@@ -63,6 +73,8 @@ public class AnalyzerController {
                                 new PieChart.Data(sFullPath.isSelected() ?
                                         entry.getKey() :
                                         Path.of(entry.getKey()).getFileName().toString(), entry.getValue()))
+                        .sorted(Comparator.comparing(PieChart.Data::getPieValue).reversed())
+                        .limit(100)
                         .collect(Collectors.toList())
         );
 
