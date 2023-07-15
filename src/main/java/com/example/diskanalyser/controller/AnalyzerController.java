@@ -52,16 +52,17 @@ public class AnalyzerController {
     public void initialize(Stage stage) {
         this.stage = stage;
         stage.setTitle("disk-analyzer");
-        if (!limit.getText().isEmpty()) {
-            gb = Long.parseLong(limit.getText()) * 1024 * 1024 * 8;
-        } else {
-            gb = 0L;
-        }
     }
 
     public void createChart(String path) {
         pieChartData.clear();
         // Create data for the pie chart
+        if (!limit.getText().isEmpty()) {
+            gb = Long.parseLong(limit.getText()) * 1073741824;
+            System.out.println(gb);
+        } else {
+            gb = 0L;
+        }
         pieChartData.addAll(
                 sizes.entrySet()
                         .parallelStream()
@@ -69,6 +70,7 @@ public class AnalyzerController {
                             Path parent = Path.of(entry.getKey()).getParent();
                             return parent != null && parent.toString().equals(path);
                         })
+                        .filter(entry -> entry.getValue() >= gb)
                         .map(entry ->
                                 new PieChart.Data(sFullPath.isSelected() ?
                                         entry.getKey() :
