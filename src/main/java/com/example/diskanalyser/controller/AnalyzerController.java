@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -29,6 +30,9 @@ public class AnalyzerController {
     protected PieChart pieChart;
 
     @FXML
+    private CheckBox sFullPath;
+
+    @FXML
     private void handleDirectoryButtonAction(ActionEvent event) {
         // Opening the directory selection dialog box
         File file = new DirectoryChooser().showDialog(stage);
@@ -46,7 +50,6 @@ public class AnalyzerController {
     }
 
     public void createChart(String path) {
-        AtomicLong maxSize = new AtomicLong();
         pieChartData.clear();
         // Create data for the pie chart
         pieChartData.addAll(
@@ -56,7 +59,10 @@ public class AnalyzerController {
                             Path parent = Path.of(entry.getKey()).getParent();
                             return parent != null && parent.toString().equals(path);
                         })
-                        .map(entry -> new PieChart.Data(Path.of(entry.getKey()).getFileName().toString(), entry.getValue()))
+                        .map(entry ->
+                                new PieChart.Data(sFullPath.isSelected() ?
+                                        entry.getKey() :
+                                        Path.of(entry.getKey()).getFileName().toString(), entry.getValue()))
                         .collect(Collectors.toList())
         );
 
