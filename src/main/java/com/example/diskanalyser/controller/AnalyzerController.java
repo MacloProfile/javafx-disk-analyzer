@@ -58,8 +58,7 @@ public class AnalyzerController {
         pieChartData.clear();
         // Create data for the pie chart
         if (!limit.getText().isEmpty()) {
-            gb = Long.parseLong(limit.getText()) * 1073741824;
-            System.out.println(gb);
+            gb = Math.round(Double.parseDouble(limit.getText()) * 1073741824);
         } else {
             gb = 0L;
         }
