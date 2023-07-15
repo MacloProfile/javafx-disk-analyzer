@@ -3,10 +3,14 @@
 <?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
 
 <BorderPane xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.diskanalyser.controller.AnalyzerController">
     <top>
-        <Button fx:id="directoryButton" onAction="#handleDirectoryButtonAction" prefHeight="22.0" prefWidth="109.0" text="Choose directory" BorderPane.alignment="CENTER" />
+        <Button fx:id="directoryButton" onAction="#handleDirectoryButtonAction" prefHeight="25.0" prefWidth="502.0" text="Choose directory" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="Franklin Gothic Demi" size="16.0" />
+         </font></Button>
     </top>
     <center>
         <PieChart fx:id="pieChart" />

@@ -56,7 +56,7 @@ public class AnalyzerController {
                             Path parent = Path.of(entry.getKey()).getParent();
                             return parent != null && parent.toString().equals(path);
                         })
-                        .map(entry -> new PieChart.Data(entry.getKey(), entry.getValue()))
+                        .map(entry -> new PieChart.Data(Path.of(entry.getKey()).getFileName().toString(), entry.getValue()))
                         .collect(Collectors.toList())
         );
 
