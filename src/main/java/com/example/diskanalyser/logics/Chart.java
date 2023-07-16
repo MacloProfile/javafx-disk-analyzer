@@ -91,7 +91,7 @@ public class Chart {
                 else
                     mainPath = Paths.get(mainPath, selectedFolderName).toString();
                 //delete GB info
-                mainPath = mainPath.substring(0, mainPath.length() - 8);
+                mainPath = mainPath.substring(0, mainPath.length() - 8).trim();
                 System.out.println(mainPath);
                 repeat(mainPath);
             });
