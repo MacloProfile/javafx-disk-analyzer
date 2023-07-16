@@ -46,7 +46,7 @@ public class AnalyzerController {
             String path = file.getAbsolutePath();
             // Calculate directory sizes
             sizes = new DiskScan().checkSize(Path.of(path));
-            createChart(path);
+            start(path);
         }
     }
 
@@ -55,23 +55,8 @@ public class AnalyzerController {
         stage.setTitle("disk-analyzer");
     }
 
-    public void createChart(String path) {
-        Chart chart = new Chart();
-        pieChartData.clear();
-        // Create data for the pie chart
-        if (!limit.getText().isEmpty()) {
-            gb = Math.round(Double.parseDouble(limit.getText()) * 1073741824);
-        } else {
-            gb = 0L;
-        }
-
-        //createChartVisual
-        chart.setVisual(pieChartData, path, sizes, gb, sFullPath.isSelected());
-
-        // Setting the data in a pie chart
-        pieChart.setData(pieChartData);
-
-        // Assigning event handlers for pie chart segments
-        chart.setInfo(pieChart);
+    public void start(String path) {
+        Chart chart = new Chart(pieChart, gb, sizes, pieChartData, limit, sFullPath);
+        chart.createChart(path);
     }
 }
