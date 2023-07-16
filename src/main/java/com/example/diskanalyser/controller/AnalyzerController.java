@@ -1,5 +1,6 @@
 package com.example.diskanalyser.controller;
 
+import com.example.diskanalyser.logics.Chart;
 import com.example.diskanalyser.logics.DiskScan;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,10 +33,10 @@ public class AnalyzerController {
     protected PieChart pieChart;
 
     @FXML
-    private CheckBox sFullPath;
+    protected CheckBox sFullPath;
 
     @FXML
-    private TextField limit;
+    protected TextField limit;
 
     @FXML
     private void handleDirectoryButtonAction(ActionEvent event) {
@@ -55,6 +56,7 @@ public class AnalyzerController {
     }
 
     public void createChart(String path) {
+        Chart chart = new Chart();
         pieChartData.clear();
         // Create data for the pie chart
         if (!limit.getText().isEmpty()) {
@@ -62,36 +64,14 @@ public class AnalyzerController {
         } else {
             gb = 0L;
         }
-        pieChartData.addAll(
-                sizes.entrySet()
-                        .parallelStream()
-                        .filter(entry -> {
-                            Path parent = Path.of(entry.getKey()).getParent();
-                            return parent != null && parent.toString().equals(path);
-                        })
-                        .filter(entry -> entry.getValue() >= gb)
-                        .limit(50)
-                        .map(entry ->
-                                new PieChart.Data(sFullPath.isSelected() ?
-                                        entry.getKey() :
-                                        Path.of(entry.getKey()).getFileName().toString(), entry.getValue()))
-                        .sorted(Comparator.comparing(PieChart.Data::getPieValue).reversed())
-                        .collect(Collectors.toList())
-        );
+
+        //createChartVisual
+        chart.setVisual(pieChartData, path, sizes, gb, sFullPath.isSelected());
 
         // Setting the data in a pie chart
         pieChart.setData(pieChartData);
 
         // Assigning event handlers for pie chart segments
-        pieChart.getData().forEach(data -> {
-            data.getNode().addEventHandler(ActionEvent.ACTION, event -> {
-                // Folder size
-                Tooltip tooltip = new Tooltip(String.format("%.2f GB", data.getPieValue() / 1e9));
-                Tooltip.install(data.getNode(), tooltip);
-                // Rebuild the pie chart with a new path
-                createChart(data.getName());
-            });
-            data.setName(data.getName() + " " + String.format("%.2f GB", data.getPieValue() / 1e9));
-        });
+        chart.setInfo(pieChart);
     }
 }
