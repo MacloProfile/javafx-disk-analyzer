@@ -1,15 +1,10 @@
 package com.example.diskanalyser.logics;
 
-import com.example.diskanalyser.controller.AnalyzerController;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -24,7 +19,8 @@ public class Chart {
     protected Map<String, Long> sizes;
     protected ObservableList<PieChart.Data> pieChartData;
     protected TextField limit;
-    private final boolean sFullPath;
+    private boolean sFullPath;
+
     private String mainPath;
 
     public Chart(PieChart pieChart, Long gb, Map<String, Long> sizes, ObservableList<PieChart.Data> pieChartData,
@@ -36,6 +32,9 @@ public class Chart {
         this.limit = limit;
         this.sFullPath = sFullPath.isSelected();
         this.mainPath = mainPath;
+    }
+
+    public Chart() {
     }
 
     public void createChart(String path) {
@@ -93,14 +92,30 @@ public class Chart {
                 //delete GB info
                 mainPath = mainPath.substring(0, mainPath.length() - 8).trim();
                 System.out.println(mainPath);
-                repeat(mainPath);
+                repeat();
             });
             data.setName(data.getName() + " " + String.format("%.2f GB", data.getPieValue() / 1e9));
         });
     }
 
-    private void repeat(String path){
-        createChart(path);
+    // create a new diagram on a new path
+    private void repeat(){
+        createChart(mainPath);
     }
 
+    // going back to the folder by pressing the corresponding button
+    public void backwards() {
+        System.out.println(mainPath);
+
+        // only if the user has selected a folder other than the root of the disk
+        if (mainPath.length() > 3) {
+            Path parentFolder = Paths.get(mainPath).getParent();
+            mainPath = parentFolder + "";
+            repeat();
+        // root folder
+        } else if (mainPath.length() > 1) {
+            repeat();
+        }
+
+    }
 }

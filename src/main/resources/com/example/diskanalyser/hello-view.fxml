@@ -15,7 +15,7 @@
         <PieChart fx:id="pieChart" prefHeight="439.0" prefWidth="619.0" />
     </center>
    <top>
-      <Pane prefHeight="41.0" prefWidth="720.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="39.0" prefWidth="720.0" BorderPane.alignment="CENTER">
          <children>
             <Pane layoutX="-304.0" opacity="0.34" prefHeight="37.0" prefWidth="4080.0" style="-fx-background-color: purple;">
                <effect>
@@ -38,6 +38,11 @@
                </font>
             </CheckBox>
             <TextField fx:id="limit" layoutX="420.0" layoutY="5.0" prefHeight="25.0" prefWidth="48.0" translateY="3.0" />
+            <Pane prefHeight="110.0" prefWidth="64.0" translateX="657.0">
+               <children>
+                  <Button fx:id="backwardsButton" layoutY="46.0" mnemonicParsing="false" prefHeight="52.0" prefWidth="57.0" text="back" />
+               </children>
+            </Pane>
          </children>
       </Pane>
    </top>

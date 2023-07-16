@@ -40,6 +40,9 @@ public class AnalyzerController {
     protected TextField limit;
 
     @FXML
+    private Button backwardsButton;
+
+    @FXML
     private void handleDirectoryButtonAction(ActionEvent event) {
         // Opening the directory selection dialog box
         File file = new DirectoryChooser().showDialog(stage);
@@ -60,5 +63,9 @@ public class AnalyzerController {
     public void start(String path) {
         Chart chart = new Chart(pieChart, gb, sizes, pieChartData, limit, sFullPath, mainPath);
         chart.createChart(path);
+
+        backwardsButton.setOnAction(actionEvent -> {
+            chart.backwards();
+        });
     }
 }
