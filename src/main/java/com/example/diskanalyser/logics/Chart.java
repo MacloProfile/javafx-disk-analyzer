@@ -90,13 +90,27 @@ public class Chart {
                     mainPath = selectedFolderName;
                 else
                     mainPath = Paths.get(mainPath, selectedFolderName).toString();
-                //delete GB info
-                mainPath = mainPath.substring(0, mainPath.length() - 8).trim();
-                System.out.println(mainPath);
                 repeat();
             });
             data.setName(data.getName() + " " + String.format("%.2f GB", data.getPieValue() / 1e9));
         });
+    }
+
+    // delete GB info
+    private void updatePath() {
+        String[] strings = mainPath.split("");
+        int end = 0;
+        int flag = 0;
+        for (int i = strings.length - 1; i >= 0; i--) {
+            end++;
+            if (strings[i].equals(" ")) {
+                flag++;
+            }
+            if (flag == 2) {
+                mainPath = mainPath.substring(0, mainPath.length() - end).trim();
+                break;
+            }
+        }
     }
 
     // create a new diagram on a new path
