@@ -90,6 +90,7 @@ public class Chart {
                     mainPath = selectedFolderName;
                 else
                     mainPath = Paths.get(mainPath, selectedFolderName).toString();
+                updatePath();
                 repeat();
             });
             data.setName(data.getName() + " " + String.format("%.2f GB", data.getPieValue() / 1e9));
@@ -111,6 +112,7 @@ public class Chart {
                 break;
             }
         }
+        System.out.println(mainPath);
     }
 
     // create a new diagram on a new path
