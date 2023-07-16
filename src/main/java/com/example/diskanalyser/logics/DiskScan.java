@@ -7,7 +7,9 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class DiskScan {
     private HashMap<String, Long> sizes;
@@ -15,19 +17,29 @@ public class DiskScan {
     public Map<String, Long> checkSize(Path path) {
         try {
             sizes = new HashMap<>();
+            Set<Path> visitedPaths = new HashSet<>();
             Files.walkFileTree(
                     path,
                     new SimpleFileVisitor<>() {
                         @Override
-                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                            long size = Files.size(file);
-                            updateDirSize(file, size);
+                        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs){
+                            try {
+                                long size = Files.size(file);
+                                updateDirSize(file, size);
+                            } catch (IOException e) {
+                                // File access error handling
+                            }
                             return FileVisitResult.CONTINUE;
                         }
 
                         @Override
-                        public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-                            return FileVisitResult.SKIP_SUBTREE;
+                        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+                            if (visitedPaths.contains(file)) {
+                                return FileVisitResult.SKIP_SUBTREE; // Skip revisited folders
+                            } else {
+                                visitedPaths.add(file);
+                                return FileVisitResult.CONTINUE;
+                            }
                         }
                     }
             );
