@@ -25,6 +25,7 @@ public class AnalyzerController {
     private Stage stage;
     protected Map<String, Long> sizes;
     protected final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+    private String mainPath;
 
     @FXML
     private Button directoryButton;
@@ -44,6 +45,7 @@ public class AnalyzerController {
         File file = new DirectoryChooser().showDialog(stage);
         if (file != null) {
             String path = file.getAbsolutePath();
+            mainPath = path;
             // Calculate directory sizes
             sizes = new DiskScan().checkSize(Path.of(path));
             start(path);
@@ -56,7 +58,7 @@ public class AnalyzerController {
     }
 
     public void start(String path) {
-        Chart chart = new Chart(pieChart, gb, sizes, pieChartData, limit, sFullPath);
+        Chart chart = new Chart(pieChart, gb, sizes, pieChartData, limit, sFullPath, mainPath);
         chart.createChart(path);
     }
 }
