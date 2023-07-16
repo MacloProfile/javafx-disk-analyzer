@@ -10,15 +10,12 @@ import javafx.scene.chart.PieChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.Comparator;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AnalyzerController {
     private Long gb;

@@ -5,6 +5,8 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class AnalyzerApplication extends Application {
@@ -23,4 +25,22 @@ public class AnalyzerApplication extends Application {
         stage.setScene(scene);
         stage.show();
     }
+
+    //error field
+    public static void error(String message) throws Exception {
+        Stage stage = new Stage();
+        Label messageLabel = new Label("ERROR");
+
+        StackPane root = new StackPane();
+        root.setPrefSize(200, 150);
+        root.getChildren().add(messageLabel);
+
+        Scene scene = new Scene(root);
+
+        stage.setScene(scene);
+        stage.setTitle(message);
+
+        stage.show();
+    }
+
 }

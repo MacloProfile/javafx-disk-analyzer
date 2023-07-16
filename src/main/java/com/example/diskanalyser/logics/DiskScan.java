@@ -33,7 +33,8 @@ public class DiskScan {
             );
             return sizes;
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            Errors.errorCheck(1);
+            throw new RuntimeException();
         }
     }
 
