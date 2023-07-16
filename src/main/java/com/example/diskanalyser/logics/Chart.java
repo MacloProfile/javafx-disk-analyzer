@@ -6,6 +6,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Comparator;
@@ -100,7 +101,12 @@ public class Chart {
 
     // create a new diagram on a new path
     private void repeat(){
-        createChart(mainPath);
+        if (Files.isDirectory(Path.of(mainPath))) {
+            createChart(mainPath);
+        } else {
+            Path parentFolder = Paths.get(mainPath).getParent();
+            mainPath = parentFolder + "";
+        }
     }
 
     // going back to the folder by pressing the corresponding button
